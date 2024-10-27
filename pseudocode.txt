@@ -1,0 +1,46 @@
+BEGIN PROGRAM
+
+DEFINE password as "29012005"
+DEFINE keyPressed as an empty string
+
+FUNCTION setup()
+    INITIALIZE LCD
+    SET buzzer pin as OUTPUT
+    SET alarm pin as OUTPUT
+    SET PIR pin as INPUT
+END FUNCTION
+
+FUNCTION loop()
+    IF PIR detects motion THEN
+        TURN ON alarm
+        DISPLAY "INTRUDER ALERT!"
+        WAIT for 5 seconds
+        CLEAR DISPLAY
+    END IF
+
+    GET key from keypad
+
+    IF key is a number THEN
+        APPEND key to keyPressed
+        DISPLAY keyPressed
+    ELSE IF key is '#' THEN
+        IF keyPressed = password THEN
+            TURN OFF alarm
+            CLEAR DISPLAY
+            DISPLAY "ALARM TURNED OFF"
+            WAIT for 5 seconds
+            CLEAR DISPLAY
+        ELSE
+            DISPLAY "INVALID PASSWORD"
+            WAIT for 5 seconds
+            CLEAR DISPLAY
+            SET currentPosition to 0
+            RESET keyPressed
+        END IF
+    ELSE IF key is '*' THEN
+        REMOVE last character from keyPressed
+        DISPLAY keyPressed
+    END IF
+END FUNCTION
+
+END PROGRAM
